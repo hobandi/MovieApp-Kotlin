@@ -1,9 +1,10 @@
-package pl.kfert.movie.data
+package pl.kfert.movie.data.base
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import kotlinx.coroutines.Dispatchers
+import pl.kfert.movie.data.DataResult
 import pl.kfert.movie.data.DataResult.Status.ERROR
 import pl.kfert.movie.data.DataResult.Status.SUCCESS
 
@@ -13,7 +14,7 @@ import pl.kfert.movie.data.DataResult.Status.SUCCESS
  * [DataResult.Status.LOADING]
  */
 fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>, networkCall: suspend () -> DataResult<A>,
-    saveCallResult: suspend (A, T?) -> Unit
+                          saveCallResult: suspend (A, T?) -> Unit
 ): LiveData<DataResult<T>> =
     liveData(Dispatchers.IO) {
 
@@ -25,6 +26,7 @@ fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>, networkCall: suspend
             item = it
             DataResult.success(it)
         }
+
         val responseStatus = networkCall.invoke()
 
         if (responseStatus.status == SUCCESS) {

@@ -25,13 +25,12 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
                     responseStatus.status == DataResult.Status.SUCCESS -> {
                         querySearch.postValue(responseStatus.data?.results?.map { item -> item.title!! }?.toList())
                         queryMovies = responseStatus.data?.results?.toMutableList()
-                        Log.d("MainViewModel", " $query $queryMovies")
                     }
                     responseStatus.status == DataResult.Status.ERROR -> Log.d("MainViewModel","error")
                     responseStatus.status == DataResult.Status.LOADING -> Log.d("MainViewModel","loading")
                 }
             } catch (e: Exception) {
-                Log.d("MainViewModel","error")
+                Log.e("MainViewModel","exception $e")
             }
         }
     }

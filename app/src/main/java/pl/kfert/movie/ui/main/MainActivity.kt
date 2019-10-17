@@ -9,9 +9,12 @@ import kotlinx.android.synthetic.main.main_activity.*
 import pl.kfert.movie.R
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.navigation.Navigation.findNavController
 import pl.kfert.movie.data.model.Movie
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.kfert.movie.ui.base.hide
+import pl.kfert.movie.ui.base.hideKeyboard
 import pl.kfert.movie.ui.detail.DetailFragmentDirections
 import pl.kfert.movie.ui.mainlist.MainListFragmentDirections
 
@@ -20,10 +23,18 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModel()
 
+    private lateinit var autoCompleteAdapter: AutoCompleteAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.main_activity)
+
+        autoCompleteAdapter = AutoCompleteAdapter(this, android.R.layout.select_dialog_item)
+        mainViewModel.querySearch.observe(
+            this,
+            Observer { list -> autoCompleteAdapter.setData(list) })
+
         setSupportActionBar(toolbar)
     }
 
@@ -51,39 +62,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAutoComplete() {
-        autoComplete.addTextChangedListener(QueryTextListener(lifecycle) {
-            mainViewModel.getListSearchForQuery(it)
-        })
-
-        autoComplete.setOnFocusChangeListener { view, hasFocus -> if(!hasFocus) autoComplete.setText("") }
-        val adapter = AutoCompleteAdapter(this, android.R.layout.select_dialog_item)
-
-        autoComplete.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            autoComplete.clearFocus()
-            goToDetailFragment(mainViewModel.getMovieId(adapter.getItem(position)))
+        autoComplete.apply {
+            addTextChangedListener(QueryTextListener(lifecycle) {
+                mainViewModel.getListSearchForQuery(it)
+            })
+            onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                hide()
+                goToDetailFragment(mainViewModel.getMovieId(autoCompleteAdapter.getItem(position)))
+            }
+            setAdapter(autoCompleteAdapter)
         }
-        autoComplete.setAdapter(adapter)
-        mainViewModel.querySearch.observe(this, Observer { data -> updateAdapter(adapter, data) })
     }
 
-    private fun goToDetailFragment(movie : Movie?) {
+    private fun goToDetailFragment(movie: Movie?) {
         movie?.let {
             findNavController(this, R.id.navHostFragment).currentDestination?.let {
-                when (it.id){
+                when (it.id) {
                     R.id.mainListFragment -> {
-                        findNavController(this, R.id.navHostFragment).navigate(MainListFragmentDirections.actionMainListFragmentToDetailFragment(movie))
+                        findNavController(this, R.id.navHostFragment).navigate(
+                            MainListFragmentDirections.actionMainListFragmentToDetailFragment(movie)
+                        )
                     }
-                    else ->
-                    {
-                        findNavController(this, R.id.navHostFragment).navigate(DetailFragmentDirections.actionDetailFragmentSelf(movie))
+                    else -> {
+                        findNavController(this, R.id.navHostFragment).navigate(
+                            DetailFragmentDirections.actionDetailFragmentSelf(movie)
+                        )
                     }
                 }
             }
         }
-    }
-
-    private fun updateAdapter(adapter: AutoCompleteAdapter, list: List<String>) {
-        adapter.setData(list)
     }
 
 }

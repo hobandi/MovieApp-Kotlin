@@ -1,4 +1,4 @@
-package pl.kfert.movie.data
+package pl.kfert.movie.data.base
 
 import com.google.gson.annotations.SerializedName
 
