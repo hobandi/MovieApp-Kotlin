@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/mainListFragment">
+    <fragment
+        android:id="@+id/mainListFragment"
+        android:name="pl.kfert.movie.ui.mainlist.MainListFragment"
+        android:label="MainListFragment" >
+        <action
+            android:id="@+id/action_mainListFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="pl.kfert.movie.ui.detail.DetailFragment"
+        android:label="DetailFragment" >
+        <argument
+            android:name="movie"
+            app:argType="pl.kfert.movie.data.model.Movie" />
+        <action
+            android:id="@+id/action_detailFragment_self"
+            app:destination="@id/detailFragment" />
+    </fragment>
+
+
+</navigation>
