@@ -18,6 +18,9 @@
         <argument
             android:name="movie"
             app:argType="pl.kfert.movie.data.model.Movie" />
+        <argument
+            android:name="save"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_detailFragment_self"
             app:destination="@id/detailFragment" />

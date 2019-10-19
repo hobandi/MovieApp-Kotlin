@@ -6,15 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
-import pl.kfert.movie.data.model.Movie
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pl.kfert.movie.databinding.DetailFragmentBinding
-import pl.kfert.movie.ui.mainlist.MainListFragmentDirections
 
 class DetailFragment : Fragment()  {
 
-    private val viewModel : DetailViewModel by viewModel{ parametersOf(args.movie)}
+    private val viewModel : DetailFragmentViewModel by viewModel{ parametersOf(args.movie, args.save)}
 
     private val args : DetailFragmentArgs by navArgs()
 

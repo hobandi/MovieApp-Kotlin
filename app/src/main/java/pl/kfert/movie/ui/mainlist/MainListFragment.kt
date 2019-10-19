@@ -16,7 +16,7 @@ import pl.kfert.movie.databinding.MainFragmentBinding
 
 class MainListFragment : Fragment() {
 
-    private val viewModel: MainListViewModel by viewModel()
+    private val viewModel: MainListFragmentViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View {
@@ -26,7 +26,7 @@ class MainListFragment : Fragment() {
         binding.lifecycleOwner = this
 
         val adapter = MovieAdapter(callbackFavoriteListener = { viewModel.updateMovie(it)
-        }, callbackItemClick = { findNavController().navigate(MainListFragmentDirections.actionMainListFragmentToDetailFragment(it)) })
+        }, callbackItemClick = { findNavController().navigate(MainListFragmentDirections.actionMainListFragmentToDetailFragment(it, true)) })
         setupRecycleView(binding, adapter)
         subscribeUi(binding, adapter)
 

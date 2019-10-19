@@ -8,9 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.dsl.module
 import pl.kfert.movie.api.MovieRemoteDataSource
 import pl.kfert.movie.data.dao.AppDatabase
-import pl.kfert.movie.data.repository.DetailRepository
-import pl.kfert.movie.data.repository.MainListRepository
-import pl.kfert.movie.data.repository.MainRepository
+import pl.kfert.movie.data.repository.*
 
 
 val repositoryModule = module {
@@ -20,9 +18,9 @@ val repositoryModule = module {
     single { Gson() }
     single { CoroutineScope(Dispatchers.IO) }
     single { MovieRemoteDataSource(get()) }
-    single { MainListRepository(get(), get())}
-    single { MainRepository(get())}
-    single { DetailRepository(get(), get()) }
+    single <MainRepository> { MainRepositoryImpl(get())}
+    single <MainListRepository> { MainListRepositoryImpl(get(), get())}
+    single <DetailRepository> { DetailRepositoryImpl(get(), get()) }
 }
 
 

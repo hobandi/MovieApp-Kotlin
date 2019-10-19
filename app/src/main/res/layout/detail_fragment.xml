@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="pl.kfert.movie.ui.detail.DetailViewModel"  />
+            type="pl.kfert.movie.ui.detail.DetailFragmentViewModel"  />
 
     </data>
 

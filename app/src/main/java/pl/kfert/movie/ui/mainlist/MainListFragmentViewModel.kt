@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import pl.kfert.movie.data.model.Movie
 import pl.kfert.movie.data.repository.MainListRepository
 
-class MainListViewModel(private val repository: MainListRepository) : ViewModel() {
+class MainListFragmentViewModel(private val repository: MainListRepository) : ViewModel() {
 
     val movies by lazy {
         repository.getMovies()
@@ -19,7 +19,7 @@ class MainListViewModel(private val repository: MainListRepository) : ViewModel(
             try {
                 repository.updateDB(movie)
             } catch (e: Exception) {
-                Log.e(MainListViewModel::class.simpleName,"${e.message}")
+                Log.e(MainListFragmentViewModel::class.simpleName,"${e.message}")
             }
         }
     }

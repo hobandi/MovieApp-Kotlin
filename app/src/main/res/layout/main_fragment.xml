@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="pl.kfert.movie.ui.mainlist.MainListViewModel" />
+            type="pl.kfert.movie.ui.mainlist.MainListFragmentViewModel" />
     </data>
 
     <FrameLayout

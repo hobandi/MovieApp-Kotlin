@@ -4,10 +4,6 @@ import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
-import pl.kfert.movie.data.model.Movie
-import pl.kfert.movie.data.repository.MainListRepository
-import android.text.method.TextKeyListener.clear
-
 
 
 class AutoCompleteAdapter(context: Context, resource: Int) :

@@ -9,19 +9,17 @@ import kotlinx.android.synthetic.main.main_activity.*
 import pl.kfert.movie.R
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.navigation.Navigation.findNavController
 import pl.kfert.movie.data.model.Movie
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pl.kfert.movie.ui.base.hide
-import pl.kfert.movie.ui.base.hideKeyboard
 import pl.kfert.movie.ui.detail.DetailFragmentDirections
 import pl.kfert.movie.ui.mainlist.MainListFragmentDirections
 
 
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModel()
+    private val mainViewModel: MainActivityViewModel by viewModel()
 
     private lateinit var autoCompleteAdapter: AutoCompleteAdapter
 
@@ -80,12 +78,12 @@ class MainActivity : AppCompatActivity() {
                 when (it.id) {
                     R.id.mainListFragment -> {
                         findNavController(this, R.id.navHostFragment).navigate(
-                            MainListFragmentDirections.actionMainListFragmentToDetailFragment(movie)
+                            MainListFragmentDirections.actionMainListFragmentToDetailFragment(movie, false)
                         )
                     }
                     else -> {
                         findNavController(this, R.id.navHostFragment).navigate(
-                            DetailFragmentDirections.actionDetailFragmentSelf(movie)
+                            DetailFragmentDirections.actionDetailFragmentSelf(movie, false)
                         )
                     }
                 }

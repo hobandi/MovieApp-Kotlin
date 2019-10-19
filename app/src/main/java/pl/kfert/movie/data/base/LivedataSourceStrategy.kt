@@ -1,39 +1,58 @@
 package pl.kfert.movie.data.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.*
+import kotlinx.coroutines.*
 import pl.kfert.movie.data.DataResult
 import pl.kfert.movie.data.DataResult.Status.ERROR
 import pl.kfert.movie.data.DataResult.Status.SUCCESS
 
-/**
- * [DataResult.Status.SUCCESS] - with data from database
- * [DataResult.Status.ERROR] - if error has occurred from any source
- * [DataResult.Status.LOADING]
- */
-fun <T, A> resultLiveData(databaseQuery: () -> LiveData<T>, networkCall: suspend () -> DataResult<A>,
-                          saveCallResult: suspend (A, T?) -> Unit
+fun <T, A> resultLiveData(
+    databaseQuery: suspend () -> T,
+    networkCall: suspend () -> DataResult<A>,
+    beforeInsert: suspend (T?, DataResult<A>) -> T,
+    insertQuery: suspend (T) -> Unit
+): LiveData<DataResult<T>> = liveData(Dispatchers.IO) {
+
+    val item = MutableLiveData<DataResult<T>>(DataResult.loading())
+
+    databaseQuery.invoke().let {
+        item.postValue(DataResult.success(it))
+    }
+    emitSource(item)
+
+    val api = networkCall.invoke()
+
+    if (api.status == SUCCESS) {
+        databaseQuery.invoke().let { databaseOld ->
+            beforeInsert.invoke(
+                databaseOld,
+                DataResult.success(api.data!!)
+            ).let {
+                insertQuery.invoke(it)
+                item.postValue(DataResult.success(it))
+            }
+        }
+    } else if (api.status == ERROR) {
+        item.postValue(DataResult.error(api.message!!))
+        emitSource(item)
+    }
+}
+
+fun <T, A> resultLiveData(
+    databaseQuery: () -> LiveData<T>,
+    networkCall: suspend () -> DataResult<A>,
+    saveCallResult: suspend (A) -> Unit
 ): LiveData<DataResult<T>> =
     liveData(Dispatchers.IO) {
-
-        emit(DataResult.loading())
-
-        var item: T? = null
-
-        val source = databaseQuery.invoke().map {
-            item = it
-            DataResult.success(it)
-        }
+        emit(DataResult.loading<T>())
+        val source = databaseQuery.invoke().map { DataResult.success(it) }
+        emitSource(source)
 
         val responseStatus = networkCall.invoke()
-
         if (responseStatus.status == SUCCESS) {
-            emitSource(source)
-            saveCallResult(responseStatus.data!!, item)
+            saveCallResult(responseStatus.data!!)
         } else if (responseStatus.status == ERROR) {
-            emit(DataResult.error(responseStatus.message!!))
+            emit(DataResult.error<T>(responseStatus.message!!))
             emitSource(source)
         }
     }

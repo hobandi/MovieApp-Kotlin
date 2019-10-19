@@ -8,9 +8,9 @@ import kotlinx.coroutines.launch
 import pl.kfert.movie.data.model.Movie
 import pl.kfert.movie.data.repository.DetailRepository
 
-class DetailViewModel(private val detailRepository: DetailRepository, private val listMovie : Movie) : ViewModel(){
+class DetailFragmentViewModel(private val detailRepository: DetailRepository, private val listMovie : Movie, private val save: Boolean) : ViewModel(){
 
-    val movie by lazy { detailRepository.getMovie(listMovie.id) }
+    val movie by lazy { detailRepository.getMovie(listMovie.id, save) }
 
     val favoriteChanged = MutableLiveData<Boolean>()
 
@@ -24,7 +24,7 @@ class DetailViewModel(private val detailRepository: DetailRepository, private va
                 detailRepository.updateDB(movie)
                 favoriteChanged.postValue(movie.isFavorite)
             } catch (e: Exception) {
-                Log.e(DetailViewModel::class.simpleName, "${e.message}")
+                Log.e(DetailFragmentViewModel::class.simpleName, "${e.message}")
             }
         }
     }

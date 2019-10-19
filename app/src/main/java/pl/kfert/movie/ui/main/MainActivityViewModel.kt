@@ -9,8 +9,7 @@ import pl.kfert.movie.data.DataResult
 import pl.kfert.movie.data.model.Movie
 import pl.kfert.movie.data.repository.MainRepository
 
-
-class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
+class MainActivityViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     var querySearch = MutableLiveData<List<String>>()
 
@@ -26,11 +25,11 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
                         querySearch.postValue(responseStatus.data?.results?.map { item -> item.title!! }?.toList())
                         queryMovies = responseStatus.data?.results?.toMutableList()
                     }
-                    responseStatus.status == DataResult.Status.ERROR -> Log.d("MainViewModel","error")
-                    responseStatus.status == DataResult.Status.LOADING -> Log.d("MainViewModel","loading")
+                    responseStatus.status == DataResult.Status.ERROR -> Log.d("MainActivityViewModel","error")
+                    responseStatus.status == DataResult.Status.LOADING -> Log.d("MainActivityViewModel","loading")
                 }
             } catch (e: Exception) {
-                Log.e("MainViewModel","exception $e")
+                Log.e("MainActivityViewModel","exception $e")
             }
         }
     }

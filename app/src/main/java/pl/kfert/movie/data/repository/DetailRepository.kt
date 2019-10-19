@@ -1,30 +1,14 @@
 package pl.kfert.movie.data.repository
 
-import androidx.lifecycle.distinctUntilChanged
-import pl.kfert.movie.api.MovieRemoteDataSource
-import pl.kfert.movie.data.dao.MovieDao
+import androidx.lifecycle.LiveData
+import pl.kfert.movie.data.DataResult
 import pl.kfert.movie.data.model.Movie
-import pl.kfert.movie.data.base.resultLiveData
 
-class DetailRepository(private val dao: MovieDao,
-                         private val moveRemoteDataSource: MovieRemoteDataSource) {
 
-    fun getMovie(movieId : String) = resultLiveData(
-        databaseQuery = {
-            dao.getMovie(movieId)
-        },
-        networkCall = {
-            moveRemoteDataSource.fetchMovie(movieId)
-        },
-        saveCallResult = { api, oldData ->
-            oldData?.let { api.isFavorite = oldData.isFavorite }
-            api?.let { dao.update(it) }
-        }
-    ).distinctUntilChanged()
+interface DetailRepository {
 
-    suspend fun updateDB(movie : Movie)
-    {
-        dao.update(movie)
-    }
+        fun getMovie(movieId : String, save : Boolean) : LiveData<DataResult<Movie>>
+
+        suspend fun updateDB(movie : Movie)
 
 }
