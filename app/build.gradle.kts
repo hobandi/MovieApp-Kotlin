@@ -40,6 +40,8 @@ android {
         }
     }
 
+    testOptions.unitTests.isReturnDefaultValues = true
+
     flavorDimensions("default")
 
     productFlavors {
@@ -137,18 +139,26 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.9.0")
 
     implementation("org.koin:koin-androidx-viewmodel:2.0.1")
-
+    implementation("org.koin:koin-androidx-ext:2.0.1")
 
     // unit test
     testImplementation("junit:junit:4.12")
-    testImplementation("org.mockito:mockito-core:2.27.0")
-    testImplementation("android.arch.core:core-testing:1.1.1")
+    testImplementation("org.mockito:mockito-core:3.1.0")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    androidTestImplementation( "org.mockito:mockito-android:+")
+    testImplementation("android.arch.core:core-testing:2.0.1")
+
 
     androidTestImplementation("com.android.support.test:runner:1.0.2")
     androidTestImplementation("com.android.support.test.espresso:espresso-core:3.0.2")
 
     androidTestImplementation("android.arch.persistence.room:testing:1.1.1")
     androidTestImplementation("android.arch.core:core-testing:1.1.1")
+
+    testImplementation("org.koin:koin-test:2.0.1")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.0")
+    testImplementation("io.kotlintest:kotlintest-extensions-koin:3.4.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.2")
 
     testImplementation("com.squareup.okhttp3:mockwebserver:3.14.0")
     testImplementation("org.jetbrains.kotlin:kotlin-stdlib:${KotlinCompilerVersion.VERSION}")

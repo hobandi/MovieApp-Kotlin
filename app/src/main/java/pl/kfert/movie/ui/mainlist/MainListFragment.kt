@@ -46,7 +46,7 @@ class MainListFragment : Fragment() {
         viewModel.movies.observe(viewLifecycleOwner, Observer {
                 result -> when (result.status) {
                 SUCCESS -> {
-                    result.data?.let{ adapter.submitList(it!!) } }
+                    result.data?.let{ adapter.submitList(it) } }
                 ERROR -> {
                     Snackbar.make(binding.recyclerView, result.message!!, Snackbar.LENGTH_LONG).show()
                 } else -> {} }
