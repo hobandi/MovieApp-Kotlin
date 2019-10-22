@@ -9,7 +9,7 @@ import pl.kfert.movie.data.model.Movie
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * FROM movie")
+    @Query("SELECT * FROM movie ORDER BY movie.id")
     fun getMovieList(): List<Movie>
 
     @Query("SELECT * FROM movie WHERE movie.id = :id")

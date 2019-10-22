@@ -23,7 +23,7 @@ class MainListRepositoryImpl(
                     isFavorite = item.isFavorite
                 }
             }
-            api.data?.results!!
+            api.data?.results!!.sortedBy { it.id }
         }, insertQuery = {
             dao.insert(it)
         }
